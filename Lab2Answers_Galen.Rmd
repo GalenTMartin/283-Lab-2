@@ -1,0 +1,138 @@
+---
+title: "Lab 2"
+author: "Galen M"
+date: "January 17, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## File management in Python
+```{r}
+library(reticulate)
+use_virtualenv("r-reticulate")
+py_available(TRUE)
+```
+
+1.
+```{python}
+import os.path
+os.path.isfile(fname) 
+```
+
+2.
+```{python}
+os.isdir('text.txt')
+```
+
+3.
+```{python}
+os.remove('text1.txt')
+```
+
+4.
+```{python}
+os.stat('text.txt')
+```
+
+5.
+```{python}
+import glob
+glob.glob("*.txt")
+```
+
+6. 
+```{python}
+glob.glob("*.txt", recursive=True)
+```
+
+7.
+```{python}
+glob.iglob("*.txt", recursive=False)
+```
+
+8.
+```{python}
+import tarfile
+tar = tarfile.open("lab2data.tar.gz")
+tar.extractall()
+tar.close()
+```
+
+## List files not processed to output
+```{python}
+os.chdir('lab2data\data')
+stuffindata = glob.glob("*.txt")
+os.chdir('../output')
+stuffinout = glob.glob("*.out")
+
+#delete
+#print stuffindata.replace("datafile", "")
+#for i in range(len(stuffindata)):
+# if "datafile" in stuffindata[i]:
+#  stuffindata[i] = stuffindata[i].replace ("datafile","")
+#print(stuffindata)
+#set(stuffindata).difference(set(stuffinout))
+
+datar = [s.replace("datafile", "") for s in stuffindata]
+datar2 = [s.replace("txt", "") for s in datar]
+outr = [s.replace("outfile", "") for s in stuffinout]
+outr2 = [s.replace("out", "") for s in outr]
+set(datar2).difference(set(outr2))
+```
+
+## File management in R
+
+1.
+```{r}
+file.create("data.txt")
+file.exists("data.txt")
+```
+
+2. 
+```{r}
+dir.exists("data.txt")
+```
+
+3.
+```{r}
+file.remove("data.txt")
+```
+
+4. 
+```{r}
+file.create("data.txt")
+file.info("data.txt")
+```
+
+5. 
+```{r}
+file.create("data1.txt", "data2.txt", "data3.txt")
+list.files(pattern = "data")
+```
+6.
+```{r}
+list.files(pattern ="data", recursive = TRUE)
+```
+
+8.
+```{r}
+untar("lab2data.tar.gz")
+```
+
+## List files
+
+```{r}
+inputs <- list.files("lab2data/data") 
+outputs <- list.files("lab2data/output")
+inputs2 <- gsub("datafile", "x", inputs)
+inputs3 <- gsub("txt", "v", inputs2)
+outputs2 <- gsub("outfile", "x", outputs)
+outputs3 <- gsub("out", "v", outputs2)
+#missing provides the files not written to output
+missing <- setdiff(inputs3, outputs3)
+missing2 <- gsub("x", "outfile", missing) 
+#missing three provides full filename
+missing3 <- gsub("v", "out", missing2)
+```
